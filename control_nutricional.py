@@ -111,10 +111,20 @@ def crear_grafico_baston(df_freq, variable):
 
 def crear_histograma_poligono(variable, datos, n_bins=5):
     fig, ax = plt.subplots(figsize=(12, 6))
-    n, bins, _ = ax.hist(datos, bins=n_bins, color='#11caa0', edgecolor='white', alpha=0.6, label='Histograma')
-    marcas = (bins[:-1] + bins[1:]) / 2
+    
+    if not np.issubdtype(datos.dtype, np.number):
+        datos_codificados = pd.Categorical(datos).codes
+        n, bins, _ = ax.hist(datos_codificados, bins=n_bins, color='#11caa0', edgecolor='white', alpha=0.6, label='Histograma')
+        marcas = (bins[:-1] + bins[1:]) / 2
+        categorias = pd.Categorical(datos).categories
+        ax.set_xticks(range(len(categorias)))
+        ax.set_xticklabels(categorias, rotation=45, ha='right')
+    else:
+        n, bins, _ = ax.hist(datos, bins=n_bins, color='#11caa0', edgecolor='white', alpha=0.6, label='Histograma')
+        marcas = (bins[:-1] + bins[1:]) / 2
+    
     ax.plot(marcas, n, color='red', marker='D', linewidth=2, label='Polígono')
-    ax.set_xlabel('Intervalos de Clase / Marca de Clase (Xi)')
+    ax.set_xlabel('Categorías' if not np.issubdtype(datos.dtype, np.number) else 'Intervalos de Clase / Marca de Clase (Xi)')
     ax.set_ylabel('Frecuencia Absoluta (fi)')
     ax.set_title(f'Histograma y Polígono - {variable.title()}', fontweight='bold')
     ax.legend()
@@ -124,12 +134,23 @@ def crear_histograma_poligono(variable, datos, n_bins=5):
 
 def crear_ogiva(variable, datos, n_bins=5):
     fig, ax = plt.subplots(figsize=(10, 5))
-    n, bins = np.histogram(datos, bins=n_bins)
-    fi_acum = np.cumsum(n)
-    marcas = (bins[:-1] + bins[1:]) / 2
+    
+    if not np.issubdtype(datos.dtype, np.number):
+        datos_codificados = pd.Categorical(datos).codes
+        n, bins = np.histogram(datos_codificados, bins=n_bins)
+        fi_acum = np.cumsum(n)
+        marcas = (bins[:-1] + bins[1:]) / 2
+        categorias = pd.Categorical(datos).categories
+        ax.set_xticks(range(len(categorias)))
+        ax.set_xticklabels(categorias, rotation=45, ha='right')
+    else:
+        n, bins = np.histogram(datos, bins=n_bins)
+        fi_acum = np.cumsum(n)
+        marcas = (bins[:-1] + bins[1:]) / 2
+    
     ax.plot(marcas, fi_acum, color='red', marker='s', linewidth=2, label='Ojiva')
     ax.fill_between(marcas, fi_acum, color='purple', alpha=0.3)
-    ax.set_xlabel('Intervalos de Clase (años)')
+    ax.set_xlabel('Categorías' if not np.issubdtype(datos.dtype, np.number) else 'Intervalos de Clase (años)')
     ax.set_ylabel('Frecuencia Absoluta Acumulada (Fi)')
     ax.set_title(f'Gráfico Ogiva - {variable.title()}', fontweight='bold')
     ax.legend()
