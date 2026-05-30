@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from scipy import stats as scipy_stats
 
 st.set_page_config(
     page_title="🏋️ Control Nutricional",
@@ -52,6 +53,38 @@ def calcular_frecuencia_cuantitativa(serie, agrupar=False, n_intervalos=5):
     df['Fi'] = df['Frec. Acumulada']
     df['Hi'] = df['hi'].cumsum().round(4)
     return df
+
+def calcular_medidas_tendencia(serie):
+    datos = serie.dropna()
+    n = len(datos)
+    
+    if n == 0:
+        return pd.DataFrame()
+    
+    moda_values = datos.mode()
+    moda = moda_values.iloc[0] if len(moda_values) > 0 else np.nan
+    
+    media_geom = np.nan
+    if all(datos > 0):
+        media_geom = scipy_stats.gmean(datos)
+    
+    media_arm = np.nan
+    if all(datos != 0):
+        media_arm = scipy_stats.hmean(datos)
+    
+    media_cuad = np.sqrt((datos ** 2).mean())
+    
+    medidas = {
+        'Media Aritmética': datos.mean(),
+        'Mediana': datos.median(),
+        'Moda': moda,
+        'Media Geométrica': media_geom,
+        'Media Armónica': media_arm,
+        'Media Cuadrática': media_cuad
+    }
+    
+    return pd.DataFrame({'Valor': [f"{v:.4f}" if pd.notna(v) else "N/A" for v in medidas.values()]}, 
+                       index=list(medidas.keys()))
 
 def crear_grafico_barras(df_freq, variable, es_cualitativa=True):
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -209,7 +242,12 @@ def main():
                     st.dataframe(df_freq, use_container_width=True, hide_index=True)
                     st.pyplot(renderizar_grafico(tipo, df_freq, variable, df[variable].dropna(), n_bins, False))
 
-                with st.expander("📐 Estadísticas descriptivas"):
+                with st.expander("📐 Medidas de Tendencia Central", expanded=True):
+                    medidas_df = calcular_medidas_tendencia(df[variable])
+                    if not medidas_df.empty:
+                        st.dataframe(medidas_df, use_container_width=True)
+                    
+                    st.subheader("📊 Estadísticas Descriptivas")
                     stats = df[variable].describe()
                     labels = {
                         'count': 'Total de registros', 'mean': 'Promedio (Media)', 'std': 'Desviación Estándar',
