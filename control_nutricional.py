@@ -112,7 +112,9 @@ def crear_grafico_baston(df_freq, variable):
 def crear_histograma_poligono(variable, datos, n_bins=5):
     fig, ax = plt.subplots(figsize=(12, 6))
     
-    if not np.issubdtype(datos.dtype, np.number):
+    es_numerico = pd.api.types.is_numeric_dtype(datos)
+    
+    if not es_numerico:
         datos_codificados = pd.Categorical(datos).codes
         n, bins, _ = ax.hist(datos_codificados, bins=n_bins, color='#11caa0', edgecolor='white', alpha=0.6, label='Histograma')
         marcas = (bins[:-1] + bins[1:]) / 2
@@ -124,7 +126,7 @@ def crear_histograma_poligono(variable, datos, n_bins=5):
         marcas = (bins[:-1] + bins[1:]) / 2
     
     ax.plot(marcas, n, color='red', marker='D', linewidth=2, label='Polígono')
-    ax.set_xlabel('Categorías' if not np.issubdtype(datos.dtype, np.number) else 'Intervalos de Clase / Marca de Clase (Xi)')
+    ax.set_xlabel('Categorías' if not es_numerico else 'Intervalos de Clase / Marca de Clase (Xi)')
     ax.set_ylabel('Frecuencia Absoluta (fi)')
     ax.set_title(f'Histograma y Polígono - {variable.title()}', fontweight='bold')
     ax.legend()
@@ -135,7 +137,9 @@ def crear_histograma_poligono(variable, datos, n_bins=5):
 def crear_ogiva(variable, datos, n_bins=5):
     fig, ax = plt.subplots(figsize=(10, 5))
     
-    if not np.issubdtype(datos.dtype, np.number):
+    es_numerico = pd.api.types.is_numeric_dtype(datos)
+    
+    if not es_numerico:
         datos_codificados = pd.Categorical(datos).codes
         n, bins = np.histogram(datos_codificados, bins=n_bins)
         fi_acum = np.cumsum(n)
@@ -150,7 +154,7 @@ def crear_ogiva(variable, datos, n_bins=5):
     
     ax.plot(marcas, fi_acum, color='red', marker='s', linewidth=2, label='Ojiva')
     ax.fill_between(marcas, fi_acum, color='purple', alpha=0.3)
-    ax.set_xlabel('Categorías' if not np.issubdtype(datos.dtype, np.number) else 'Intervalos de Clase (años)')
+    ax.set_xlabel('Categorías' if not es_numerico else 'Intervalos de Clase (años)')
     ax.set_ylabel('Frecuencia Absoluta Acumulada (Fi)')
     ax.set_title(f'Gráfico Ogiva - {variable.title()}', fontweight='bold')
     ax.legend()
@@ -195,7 +199,7 @@ def main():
         return
 
     try:
-        with st.spinner("⏳ Cargando archivo..."):
+        with st.spinner(" Cargando archivo..."):
             df = pd.read_csv(uploaded_file)
         st.success("✅ Archivo cargado correctamente!")
         st.divider()
@@ -219,7 +223,7 @@ def main():
                 variable = st.selectbox("Selecciona una variable cualitativa:", vars_cual, key="cual_select")
                 df_freq = calcular_frecuencia_cualitativa(df[variable])
                 
-                st.subheader("📋 Tabla de Frecuencias")
+                st.subheader(" Tabla de Frecuencias")
                 st.dataframe(df_freq, use_container_width=True, hide_index=True)
 
                 st.subheader("📈 Selecciona el tipo de gráfico")
@@ -259,7 +263,7 @@ def main():
                 else:
                     n_bins = st.slider("Número de intervalos:", 3, 15, 5, key="bins_slider")
                     df_freq = calcular_frecuencia_cuantitativa(df[variable], agrupar=True, n_intervalos=n_bins)
-                    st.subheader("📋 Tabla de Frecuencias Agrupadas")
+                    st.subheader(" Tabla de Frecuencias Agrupadas")
                     st.dataframe(df_freq, use_container_width=True, hide_index=True)
                     st.pyplot(renderizar_grafico(tipo, df_freq, variable, df[variable].dropna(), n_bins, False))
 
