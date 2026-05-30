@@ -1,0 +1,30 @@
+id_paciente,genero,tipo_dieta,objetivo,edad,peso_inicial_kg,peso_actual_kg,altura_cm,imc
+1,M,Baja en calorías,Mantener,56,93.0,93.9,179,29.3
+2,M,Balanceada,Mantener,38,72.8,71.2,166,25.8
+3,M,Balanceada,Bajar peso,28,68.3,61.3,183,18.3
+4,M,Balanceada,Mantener,20,57.3,58.2,181,17.8
+5,M,Vegetariana,Subir peso,47,55.0,60.0,165,22.0
+6,M,Balanceada,Bajar peso,50,79.5,71.5,171,24.5
+7,M,Alta en proteínas,Subir peso,42,76.0,78.6,176,25.4
+8,F,Balanceada,Bajar peso,45,53.1,45.7,165,16.8
+9,F,Vegetariana,Mantener,20,66.3,65.0,154,27.4
+10,M,Alta en proteínas,Bajar peso,56,93.0,91.8,177,29.3
+11,F,Vegetariana,Subir peso,26,48.4,52.1,175,17.0
+12,M,Alta en proteínas,Ganar masa muscular,24,74.8,76.0,171,26.0
+13,F,Baja en calorías,Subir peso,31,54.1,57.8,166,21.0
+14,M,Balanceada,Subir peso,19,75.8,79.0,189,22.1
+15,M,Balanceada,Subir peso,46,88.7,91.5,190,25.3
+16,F,Vegetariana,Bajar peso,33,72.5,66.8,162,25.4
+17,M,Alta en proteínas,Ganar masa muscular,29,68.2,73.5,178,23.2
+18,F,Baja en calorías,Bajar peso,41,81.3,74.2,159,29.4
+19,M,Balanceada,Mantener,52,85.4,84.1,174,27.8
+20,F,Vegetariana,Mantener,25,58.9,59.5,163,22.4
+21,M,Alta en proteínas,Ganar masa muscular,22,62.0,67.2,172,22.7
+22,F,Baja en calorías,Bajar peso,38,76.8,70.1,161,27.0
+23,M,Balanceada,Mantener,44,79.2,78.5,180,24.2
+24,F,Vegetariana,Subir peso,27,51.3,54.8,158,22.0
+25,M,Alta en proteínas,Bajar peso,49,91.5,85.2,175,27.8
+26,F,Balanceada,Mantener,35,63.7,64.2,167,23.0
+27,M,Baja en calorías,Bajar peso,55,96.2,89.4,182,27.0
+28,F,Vegetariana,Mantener,30,55.8,56.1,160,21.9
+29,M,Balanceada,Subir peso,23,65.4,69.8,176,22.5
